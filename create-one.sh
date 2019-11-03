@@ -41,11 +41,11 @@ vmrun -T ws  stop  $VM_FILE
 vmrun -T ws  snapshot  $VM_FILE  $SNAPSHOT_NAME
 #2 链接克隆
 if [[ "$CLONE_TYPE" =~ 'linked' ]]; then
-  vmrun -T ws  clone  $VM_FILE  ${NEW_VM_FILE} linked -snapshot=$SNAPSHOT_NAME  -cloneName=$NEW_VM_NAME
+  vmrun -T ws  clone  $VM_FILE  ${NEW_VM_FILE} linked -snapshot=$SNAPSHOT_NAME  -cloneName=${NEW_VM_NAME}-${VM_INDEX}
 fi
 #2 完全克隆
 if [[ "$CLONE_TYPE" =~ 'full' ]]; then
-  vmrun -T ws  clone  $VM_FILE ${NEW_VM_FILE} full -snapshot=$SNAPSHOT_NAME  -cloneName=$NEW_VM_NAME
+  vmrun -T ws  clone  $VM_FILE ${NEW_VM_FILE} full -snapshot=$SNAPSHOT_NAME  -cloneName=${NEW_VM_NAME}-${VM_INDEX}
 fi
 vmrun -T ws deleteSnapshot $VM_FILE  $SNAPSHOT_NAME
 }
@@ -53,6 +53,7 @@ vmrun -T ws deleteSnapshot $VM_FILE  $SNAPSHOT_NAME
 #2 启动
 function vm_start(){
 vmrun -T ws start $NEW_VM_FILE
+sleep 15
 }
 #2 列出
 function vm_list(){
@@ -61,6 +62,7 @@ vmrun -T ws list
 #2 关机
 function vm_stop(){
 vmrun -T ws stop $NEW_VM_FILE
+sleep 15
 }
 #2 删除
 function vm_delete(){
@@ -74,7 +76,7 @@ case $1 in
         vm_start
         ;;
     list)
-        VM_list
+        vm_list
         ;;
     stop)
         vm_stop
